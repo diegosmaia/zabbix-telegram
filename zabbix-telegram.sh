@@ -16,7 +16,7 @@ TEXT=$3
 ############################################
 # IP do seu zabbix server
 ############################################
-ZABBIX-SERVER-IP=192.168.10.24
+ZABBIX_SERVER_IP=192.168.10.24
 
 ############################################
 # O Bot-Token do exemplo, tem que modificar
@@ -35,10 +35,10 @@ GRAPHID=$TEXT
 ############################################
 # Caso queriam o gráfico diferentes de 3h e 1d modifiquem baixo o period=10800 que é 3600 * 3h
 ############################################
-wget --load-cookies=/tmp/cookies.txt -O /tmp/graph3h.png -q "http://$ZABBIX-SERVER-IP/zabbix/chart.php?&itemids[0]=$GRAPHID&type=0&updateProfile=1&profileIdx=web.item.graph&period=1
+wget --load-cookies=/tmp/cookies.txt -O /tmp/graph3h.png -q "http://$ZABBIX_SERVER_IP/zabbix/chart.php?&itemids[0]=$GRAPHID&type=0&updateProfile=1&profileIdx=web.item.graph&period=1
 0800&width=800"
 
-wget --load-cookies=/tmp/cookies.txt -O /tmp/graph1d.png -q "http://$ZABBIX-SERVER-IP/zabbix/chart.php?&itemids[0]=$GRAPHID&type=0&updateProfile=1&profileIdx=web.item.graph&period=86400&width=800"
+wget --load-cookies=/tmp/cookies.txt -O /tmp/graph1d.png -q "http://$ZABBIX_SERVER_IP/zabbix/chart.php?&itemids[0]=$GRAPHID&type=0&updateProfile=1&profileIdx=web.item.graph&period=86400&width=800"
 
 curl -s -X POST "https://api.telegram.org/bot$BOT_TOKEN/sendPhoto" -F chat_id="$USER" -F photo="@/tmp/graph3h.png"
 curl -s -X POST "https://api.telegram.org/bot$BOT_TOKEN/sendPhoto" -F chat_id="$USER" -F photo="@/tmp/graph1d.png"
