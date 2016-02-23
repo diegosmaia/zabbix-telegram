@@ -12,6 +12,7 @@ USER=-57169325
 USER=$1
 SUBJECT=$2
 TEXT=$3
+TEXT = TEXT.replace('/n','\n')
 
 ############################################
 # IP do seu zabbix server
