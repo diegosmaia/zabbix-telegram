@@ -35,8 +35,7 @@ GRAPHID=$TEXT
 ############################################
 # Caso queriam o gráfico diferentes de 3h e 1d modifiquem baixo o period=10800 que é 3600 * 3h
 ############################################
-wget --load-cookies=/tmp/cookies.txt -O /tmp/graph3h.png -q "http://$ZABBIX_SERVER_IP/zabbix/chart.php?&itemids[0]=$GRAPHID&type=0&updateProfile=1&profileIdx=web.item.graph&period=1
-0800&width=800"
+wget --load-cookies=/tmp/cookies.txt -O /tmp/graph3h.png -q "http://$ZABBIX_SERVER_IP/zabbix/chart.php?&itemids[0]=$GRAPHID&type=0&updateProfile=1&profileIdx=web.item.graph&period=10800&width=800"
 
 wget --load-cookies=/tmp/cookies.txt -O /tmp/graph1d.png -q "http://$ZABBIX_SERVER_IP/zabbix/chart.php?&itemids[0]=$GRAPHID&type=0&updateProfile=1&profileIdx=web.item.graph&period=86400&width=800"
 
