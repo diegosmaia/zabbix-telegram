@@ -1,4 +1,5 @@
-# zabbix-telegram
-Zabbix Telegram com graficos
+# Zabbix-Telegram com Gráficos
 
-Howto esta no arquivo Zabbix-Telegram-com-graficos.pdf
+Zabbix Telegram com gráficos
+
+Howto está no arquivo Zabbix-Telegram-com-graficos.pdf
