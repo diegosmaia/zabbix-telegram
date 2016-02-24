@@ -85,12 +85,12 @@ ${CURL} -c ${COOKIE} -b ${COOKIE} -s -X GET "https://api.telegram.org/bot${BOT_T
 # Envio dos graficos 
 ############################################
 
-if [ $GRAPHID > 0 ]; then
+# Se existir valor no GRAPHID ele envia
+[ -n "$GRAPHID" ] && {
 
 	${CURL} -c ${COOKIE}  -b ${COOKIE} -d "itemids=${GRAPHID}&period=${PERIOD}&width=${WIDTH}" ${ZBX_URL}"/chart.php" > $PNG_PATH
 	${CURL} -s -X POST "https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto" -F chat_id="${USER}" -F photo="@/tmp/graph.png"
-
-fi
+}
 
 exit 0
 
