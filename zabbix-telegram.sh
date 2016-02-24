@@ -66,7 +66,7 @@ BOT_TOKEN='161080402:AAGah3HIxM9jUr0NX1WmEKX3cJCv9PyWD58'
 ############################################
 
 # Limpando Cookie
-rm ${COOKIE}
+rm -f ${COOKIE}
 
 # Zabbix - Ingles - Botao da tela de login e "Sign in"
 #${CURL} -c ${COOKIE} -b ${COOKIE} -d "name=${USERNAME}&password=${PASSWORD}&autologin=1&enter=Sign+in" ${ZBX_URL}"/index.php"
