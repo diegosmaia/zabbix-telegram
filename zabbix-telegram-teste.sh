@@ -15,7 +15,7 @@ MAIN_DIRECTORY="/usr/lib/zabbix/alertscripts/"
 # GroupId do exemplo, tem que modificar
 ############################################
 
-USER=-57169325
+USER=-47799136
 
 ############################################
 
@@ -29,8 +29,8 @@ ZBX_URL="http://192.168.10.24/zabbix"
 # Conta de usuário para logar no site Zabbix
 ##############################################
 
-USERNAME="guest"
-PASSWORD=""
+USERNAME="dmaia"
+PASSWORD="30680127"
 
 ##############################################
 # Graficos
@@ -52,7 +52,7 @@ PERIOD=10800
 # O Bot-Token do exemplo, tem que modificar
 ############################################
 
-BOT_TOKEN='161080402:AAGah3HIxM9jUr0NX1WmEKX3cJCv9PyWD58'
+BOT_TOKEN='153617647:AAEdLIA5qkgAtJMgG11xj3Cl0Ny6GmBWODs'
 
 
 ############################################
@@ -88,6 +88,9 @@ ${CURL} -c ${COOKIE} -b ${COOKIE} -s -X GET "https://api.telegram.org/bot${BOT_T
 if [ $GRAPHID > 0 ]; then
 
 	${CURL} -c ${COOKIE}  -b ${COOKIE} -d "itemids=${GRAPHID}&period=${PERIOD}&width=${WIDTH}" ${ZBX_URL}"/chart.php" > $PNG_PATH
+
+	# wget --load-cookies=/tmp/cookies.txt -O $PNG_PATH  -q "${ZBX_URL}/chart.php?&itemids[0]=${GRAPHID}&type=0&updateProfile=1&profileIdx=web.item.graph&period=${PERIODO}&width=${WIDTH}"
+
 	${CURL} -s -X POST "https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto" -F chat_id="${USER}" -F photo="@/tmp/graph.png"
 
 fi
