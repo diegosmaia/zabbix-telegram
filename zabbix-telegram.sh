@@ -2,7 +2,7 @@
 
 # Zabbix-Telegram envio de alerta por Telegram com graficos dos eventos
 # Filename: zabbix-telegram.sh
-# Revision: 1.0
+# Revision: 1.1
 # Date: 23/02/2016
 # Author: Diego Maia - diegosmaia@yahoo.com.br Telegram - @diegosmaia
 # Aproveitei algumas coisas do script getItemGraph.sh Author: Qicheng
@@ -61,18 +61,6 @@ BOT_TOKEN='161080402:AAGah3HIxM9jUr0NX1WmEKX3cJCv9PyWD58'
 
 #echo "$USER | $SUBJECT | $GRAPHID" >> /tmp/telegram-teste
 
-############################################
-# Zabbix logando com o usuário no site
-############################################
-
-# Limpando Cookie
-rm -f ${COOKIE}
-
-# Zabbix - Ingles - Botao da tela de login e "Sign in"
-#${CURL} -c ${COOKIE} -b ${COOKIE} -d "name=${USERNAME}&password=${PASSWORD}&autologin=1&enter=Sign+in" ${ZBX_URL}"/index.php"
-
-# Zabbix - Portugues - Botao da tela de login e "Conectar-se"
-${CURL} -c ${COOKIE} -b ${COOKIE} -d "name=${USERNAME}&password=${PASSWORD}&autologin=1&enter=Conectar-se" ${ZBX_URL}"/index.php"
 
 ############################################
 # Envio Mensagem de Texto do Alerta
@@ -88,6 +76,19 @@ ${CURL} -c ${COOKIE} -b ${COOKIE} -s -X GET "https://api.telegram.org/bot${BOT_T
 # Se existir valor no GRAPHID ele envia
 [ -n "$GRAPHID" ] && {
 
+	############################################
+	# Zabbix logando com o usuário no site
+	############################################
+
+	# Limpando Cookie
+	rm -f ${COOKIE}
+
+	# Zabbix - Ingles - Botao da tela de login e "Sign in"
+	#${CURL} -c ${COOKIE} -b ${COOKIE} -d "name=${USERNAME}&password=${PASSWORD}&autologin=1&enter=Sign+in" ${ZBX_URL}"/index.php"
+
+	# Zabbix - Portugues - Botao da tela de login e "Conectar-se"
+	${CURL} -c ${COOKIE} -b ${COOKIE} -d "name=${USERNAME}&password=${PASSWORD}&autologin=1&enter=Conectar-se" ${ZBX_URL}"/index.php"
+	
 	${CURL} -c ${COOKIE}  -b ${COOKIE} -d "itemids=${GRAPHID}&period=${PERIOD}&width=${WIDTH}" ${ZBX_URL}"/chart.php" > $PNG_PATH
 	${CURL} -s -X POST "https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto" -F chat_id="${USER}" -F photo="@/tmp/graph.png"
 }
