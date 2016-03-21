@@ -80,8 +80,6 @@ ${CURL} -c ${COOKIE} -b ${COOKIE} -s -X GET "https://api.telegram.org/bot${BOT_T
 	# Zabbix logando com o usuário no site
 	############################################
 
-	# Limpando Cookie
-	rm -f ${COOKIE}
 
 	# Zabbix - Ingles - Botao da tela de login e "Sign in"
 	#${CURL} -c ${COOKIE} -b ${COOKIE} -d "name=${USERNAME}&password=${PASSWORD}&autologin=1&enter=Sign+in" ${ZBX_URL}"/index.php"
@@ -89,8 +87,15 @@ ${CURL} -c ${COOKIE} -b ${COOKIE} -s -X GET "https://api.telegram.org/bot${BOT_T
 	# Zabbix - Portugues - Botao da tela de login e "Conectar-se"
 	${CURL} -c ${COOKIE} -b ${COOKIE} -d "name=${USERNAME}&password=${PASSWORD}&autologin=1&enter=Conectar-se" ${ZBX_URL}"/index.php"
 	
+	# Zabbix 2 - Comment a linha abaixo  (#) se o seu Zabbix for 3.0
 	${CURL} -c ${COOKIE}  -b ${COOKIE} -d "itemids=${GRAPHID}&period=${PERIOD}&width=${WIDTH}" ${ZBX_URL}"/chart.php" > $PNG_PATH
+	# Zabbix 3 - Descomment a linha abaixo (#) se o seu Zabbix for 3.0
+	#${CURL} -c ${COOKIE}  -b ${COOKIE} -d "graphid=${GRAPHID}&period=${PERIOD}&width=${WIDTH}" ${ZBX_URL}"/chart.php" > $PNG_PATH
+
 	${CURL} -s -X POST "https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto" -F chat_id="${USER}" -F photo="@/tmp/graph.png"
+	
+	# Limpando Cookie
+	rm -f ${COOKIE}
 }
 
 exit 0
