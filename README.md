@@ -1,6 +1,5 @@
-# Zabbix-Telegram com Gráficos (Zabbix-Telegram with graphics)
-
-Zabbix Telegram com gráficos
+# Zabbix-Telegram com Gráficos 
+# Zabbix-Telegram with graphics
 
 Howto está no arquivo Zabbix-Telegram-com-graficos.pdf
 
