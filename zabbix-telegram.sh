@@ -14,14 +14,6 @@
 
 MAIN_DIRECTORY="/usr/lib/zabbix/alertscripts/"
 
-############################################
-# GroupId do exemplo, tem que modificar
-############################################
-
-USER=-57169325
-
-############################################
-
 USER=$1
 SUBJECT=$2
 SUBJECT="${SUBJECT//,/ }"
@@ -29,13 +21,12 @@ MESSAGE="chat_id=${USER}&text=$3"
 GRAPHID=$3
 GRAPHID=$(echo $GRAPHID | grep -o -E "(Item Graphic: \[[0-9]{7}\])|(Item Graphic: \[[0-9]{6}\])|(Item Graphic: \[[0-9]{5}\])|(Item Graphic: \[[0-9]{4}\])|(Item Graphic: \[[0-9]{3}\])")
 GRAPHID=$(echo $GRAPHID | grep -o -E "([0-9]{7})|([0-9]{6})|([0-9]{5})|([0-9]{4})|([0-9]{3})")
-ZBX_URL="http://192.168.0.102/zabbix"
 ZABBIXMSG="/tmp/zabbix-message-$(date "+%Y.%m.%d-%H.%M.%S").tmp"
 
 #############################################
-# Se nao desejar enviar / grafico = 0
+# Endereço do Zabbix
 #############################################
-ENVIA_GRAFICO=1
+ZBX_URL="http://192.168.0.102/zabbix"
 
 ##############################################
 # Conta de usuário para logar no site Zabbix
@@ -43,6 +34,20 @@ ENVIA_GRAFICO=1
 
 USERNAME="admin"
 PASSWORD="zabbix"
+
+############################################
+# O Bot-Token do exemplo, tem que modificar
+############################################
+
+BOT_TOKEN='161080402:AAGah3HIxM9jUr0NX1WmEKX3cJCv9PyWD58'
+
+#############################################
+# Se nao desejar enviar GRAFICO / ENVIA_GRAFICO = 0
+# Se nao desejar enviar MESSAGE / ENVIA_MESSAGE = 0
+#############################################
+
+ENVIA_GRAFICO=1
+ENVIA_MESSAGE=1
 
 ##############################################
 # Graficos
@@ -59,11 +64,6 @@ PNG_PATH="/tmp/telegram_graph-$(date "+%Y.%m.%d-%H.%M.%S").png"
 
 PERIOD=10800
 
-############################################
-# O Bot-Token do exemplo, tem que modificar
-############################################
-
-BOT_TOKEN='161080402:AAGah3HIxM9jUr0NX1WmEKX3cJCv9PyWD58'
 
 ###########################################
 # Verifica se foi passado os 3 parametros
@@ -81,14 +81,17 @@ fi
 
 echo "$MESSAGE" > $ZABBIXMSG
 ${CURL} -k -s -c ${COOKIE} -b ${COOKIE} -s -X GET "https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${USER}&text=\"${SUBJECT}\""  > /dev/null
-${CURL} -k -s -c ${COOKIE} -b ${COOKIE} --data-binary @${ZABBIXMSG} -X GET "https://api.telegram.org/bot${BOT_TOKEN}/sendMessage"  > /dev/null
 
+if [ "$ENVIA_MESSAGE" -eq 1 ]
+then
+	${CURL} -k -s -c ${COOKIE} -b ${COOKIE} --data-binary @${ZABBIXMSG} -X GET "https://api.telegram.org/bot${BOT_TOKEN}/sendMessage"  > /dev/null
+fi
 ############################################
 # Envio dos graficos
 ############################################
 
-# Se passou os 3 parametros para o script e ENVIA_GRAFICO=1 ele envia o gráfico.
-if [ "$#" -eq 3 ] && [ "$ENVIA_GRAFICO" -eq 1 ]
+# Se ENVIA_GRAFICO=1 ele envia o gráfico.
+if [ "$ENVIA_GRAFICO" -eq 1 ]
 then
 	############################################
 	# Zabbix logando com o usuário no site
