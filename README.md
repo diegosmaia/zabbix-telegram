@@ -1,4 +1,4 @@
-# Zabbix-Telegram com Gráficos
+# Zabbix-Telegram com Gráficos (Zabbix-Telegram with graphics)
 
 Zabbix Telegram com gráficos
 
