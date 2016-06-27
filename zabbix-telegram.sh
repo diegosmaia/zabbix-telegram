@@ -21,6 +21,7 @@ MESSAGE="chat_id=${USER}&text=$3"
 GRAPHID=$3
 GRAPHID=$(echo $GRAPHID | grep -o -E "(Item Graphic: \[[0-9]{7}\])|(Item Graphic: \[[0-9]{6}\])|(Item Graphic: \[[0-9]{5}\])|(Item Graphic: \[[0-9]{4}\])|(Item Graphic: \[[0-9]{3}\])")
 GRAPHID=$(echo $GRAPHID | grep -o -E "([0-9]{7})|([0-9]{6})|([0-9]{5})|([0-9]{4})|([0-9]{3})")
+
 ZABBIXMSG="/tmp/zabbix-message-$(date "+%Y.%m.%d-%H.%M.%S").tmp"
 
 #############################################
@@ -48,6 +49,14 @@ BOT_TOKEN='161080402:AAGah3HIxM9jUr0NX1WmEKX3cJCv9PyWD58'
 
 ENVIA_GRAFICO=1
 ENVIA_MESSAGE=1
+
+# Se não receber o valor de GRAPHID ele seta o valor de ENVIA_GRAFICO para 0
+
+case $GRAPHID in
+    ''|*[!0-9]*) ENVIA_GRAFICO=0 ;;
+    *) ENVIA_GRAFICO=1 ;;
+esac
+
 
 ##############################################
 # Graficos
@@ -91,8 +100,7 @@ fi
 ############################################
 
 # Se ENVIA_GRAFICO=1 ele envia o gráfico.
-if [ "$ENVIA_GRAFICO" -eq 1 ]
-then
+if [ $(($ENVIA_GRAFICO)) -eq '1' ]; then
 	############################################
 	# Zabbix logando com o usuário no site
 	############################################
