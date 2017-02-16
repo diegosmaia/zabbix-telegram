@@ -3,8 +3,8 @@
 ##########################################################################
 # Zabbix-Telegram envio de alerta por Telegram com graficos dos eventos
 # Filename: zabbix-telegram.sh
-# Revision: 2.1
-# Date: 24/04/2016
+# Revision: 2.2
+# Date: 07/02/2017
 # Author: Diego Maia - diegosmaia@yahoo.com.br Telegram - @diegosmaia
 # Aproveitei algumas coisas:
 # Script getItemGraph.sh Author: Qicheng
@@ -111,10 +111,24 @@ if [ $(($ENVIA_GRAFICO)) -eq '1' ]; then
     	${CURL} -k -s -c ${COOKIE} -b ${COOKIE} -d "name=${USERNAME}&password=${PASSWORD}&autologin=1&enter=Sign%20in" ${ZBX_URL}"/index.php" > /dev/null
 
     	# Zabbix - Portugues - Verifique no seu Zabbix se na tela de login se o botao de login é  "Conectar-se".
-    	# ${CURL} -k -s -c ${COOKIE} -b ${COOKIE} -d "name=${USERNAME}&password=${PASSWORD}&autologin=1&enter=Conectar-se" ${ZBX_URL}"/index.php" > /dev/null
+    	 #${CURL} -k -s -c ${COOKIE} -b ${COOKIE} -d "name=${USERNAME}&password=${PASSWORD}&autologin=1&enter=Conectar-se" ${ZBX_URL}"/index.php" > /dev/null
 
-	# Download do gráfico e envio
-	${CURL} -k -s -c ${COOKIE}  -b ${COOKIE} -d "itemids=${GRAPHID}&period=${PERIOD}&width=${WIDTH}" ${ZBX_URL}"/chart.php" -o "${PNG_PATH}"
+	# Para enviar em alguns caso ao inves do grafico do lastdata um grafico personalizado
+	# No zabbix em Graphs verifica no endereço o graphid e na mensagem que vc recebe com o gráfico a ser mudado o Item Graphic
+	# O Deny Codignotto que solicitou ajuda neste item
+	if [ "${GRAPHID}" == "000001" ]; then
+		GRAPHID="00002";
+    	${CURL} -k -s -c ${COOKIE} -b ${COOKIE} -d "graphid=${GRAPHID}&period=${PERIOD}&width=${WIDTH}" ${ZBX_URL}"/chart2.php" -o "${PNG_PATH}";
+  	elif [ "${GRAPHID}" == "000002" ]; then
+  		GRAPHID="00003";
+	    ${CURL} -k -s -c ${COOKIE}  -b ${COOKIE} -d "graphid=${GRAPHID}&period=${PERIOD}&width=${WIDTH}" ${ZBX_URL}"/chart2.php" -o "${PNG_PATH}";
+	elif [ "${GRAPHID}" == "000003" ]; then
+		GRAPHID="00004";
+	    ${CURL} -k -s -c ${COOKIE}  -b ${COOKIE} -d "graphid=${GRAPHID}&period=${PERIOD}&width=${WIDTH}" ${ZBX_URL}"/chart2.php" -o "${PNG_PATH}";
+  	else
+  		# Download do gráfico e envio
+		${CURL} -k -s -c ${COOKIE}  -b ${COOKIE} -d "itemids=${GRAPHID}&period=${PERIOD}&width=${WIDTH}" ${ZBX_URL}"/chart.php" -o "${PNG_PATH}";
+	fi
 
 	${CURL} -k -s -X POST "https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto" -F chat_id="${USER}" -F photo="@${PNG_PATH}" > /dev/null
 
@@ -142,12 +156,25 @@ fi
 # Envio do Grafico
 # ${CURL} -k -X POST "https://api.telegram.org/bot${BOT_TOKEN}/sendPhoto" -F chat_id="${USER}" -F photo="@${PNG_PATH}"
 
+# Verificar se o usuario e senha esta autenticando no site
+# executa estes comandos no terminal e verifica se ele não retornar nenhuma informacao está OK caso contrário tem algo errado
+# a cada execucao limpar o cookie com rm /tmp/cookie
+
+# Zabbix com tela de login em Ingles
+# curl -k -s -c /tmp/cookie -b /tmp/cookie -d "name=${USERNAME}&password=${PASSWORD}&autologin=1&enter=Sign%20in" http://192.168.10.24/index.php 
+
+# Zabbix com tela de login em portugues
+# curl -k -s -c /tmp/cookie -b /tmp/cookie -d "name=${USERNAME}&password=${PASSWORD}&autologin=1&enter=Conectar-se" http://192.168.10.24/index.php 
+
 
 ############################################
 # Apagando os arquivos utilizados no script
 ############################################
 
 rm -f ${COOKIE}
+
 rm -f ${PNG_PATH}
+
+# Desabilita se precisar verificar o arquivo /tmp/zabbix-message-{datetime}.tmp, ele contem os dados enviados pelo Zabbix
 rm -f ${ZABBIXMSG}
 exit 0
