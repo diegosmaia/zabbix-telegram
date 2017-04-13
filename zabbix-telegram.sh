@@ -54,7 +54,6 @@ ENVIA_MESSAGE=1
 
 case $GRAPHID in
     ''|*[!0-9]*) ENVIA_GRAFICO=0 ;;
-    *) ENVIA_GRAFICO=1 ;;
 esac
 
 
