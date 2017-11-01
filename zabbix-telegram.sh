@@ -65,15 +65,13 @@ esac
 ENVIA_GRAFICO=1
 ENVIA_MESSAGE=1
 
-<<<<<<< HEAD
-=======
+
 # Se não receber o valor de GRAPHID ele seta o valor de ENVIA_GRAFICO para 0
 
 case $GRAPHID in
     ''|*[!0-9]*) ENVIA_GRAFICO=0 ;;
 esac
 
->>>>>>> a07145bba3cd8399f2dcc7136f915d338e46e3db
 
 ##############################################
 # Graficos
@@ -85,7 +83,7 @@ COOKIE="/tmp/telegram_cookie-$(date "+%Y.%m.%d-%H.%M.%S")"
 PNG_PATH="/tmp/telegram_graph-$(date "+%Y.%m.%d-%H.%M.%S").png"
 
 ############################################
-# Periodo do grafico em minutos Exp: 10800min/3600min=3h 
+# Periodo do grafico em segundos Exp: 10800seg/3600seg=3h 
 ############################################
 
 PERIOD=10800
