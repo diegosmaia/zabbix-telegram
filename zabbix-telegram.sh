@@ -13,11 +13,12 @@
 ##########################################################################
 
 MAIN_DIRECTORY="/usr/lib/zabbix/alertscripts/"
+PARSE_MODE="Markdown"
 
 USER=$1
 SUBJECT=$2
 SUBJECT="${SUBJECT//,/ }"
-MESSAGE="chat_id=${USER}&text=$3"
+MESSAGE="chat_id=${USER}&parse_mode=${PARSE_MODE}&text=$3"
 GRAPHID=$3
 GRAPHID=$(echo $GRAPHID | grep -o -E "(Item Graphic: \[[0-9]{7}\])|(Item Graphic: \[[0-9]{6}\])|(Item Graphic: \[[0-9]{5}\])|(Item Graphic: \[[0-9]{4}\])|(Item Graphic: \[[0-9]{3}\])")
 GRAPHID=$(echo $GRAPHID | grep -o -E "([0-9]{7})|([0-9]{6})|([0-9]{5})|([0-9]{4})|([0-9]{3})")
@@ -104,7 +105,7 @@ fi
 ############################################
 
 echo "$MESSAGE" > $ZABBIXMSG
-${CURL} -k -s -c ${COOKIE} -b ${COOKIE} -s -X GET "https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${USER}&text=\"${SUBJECT}\""  > /dev/null
+${CURL} -k -s -c ${COOKIE} -b ${COOKIE} -s -X GET "https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${USER}&text=${SUBJECT}$parse_mode=${PARSE_MODE}"  > /dev/null
 
 if [ "$ENVIA_MESSAGE" -eq 1 ]
 then
@@ -159,7 +160,7 @@ fi
 
 # Verificar valores recebidos do Zabbix ou do prompt
 # cat /tmp/telegram-debug.txt
-# echo "User-Telegram=$USER | Subject=$SUBJECT | Menssage=$MESSAGE | GraphID=${GRAPHID} | Period=${PERIOD} | Width=${WIDTH}" >/tmp/telegram-debug.txt
+# echo "User-Telegram=$USER | Subject=$SUBJECT | Message=$MESSAGE | GraphID=${GRAPHID} | Period=${PERIOD} | Width=${WIDTH}" >/tmp/telegram-debug.txt
 
 # Teste com curl tentando baixar o gráfico
 # Verifique o arquivo /tmp/telegram-graph.png no seu computador para ver se o grafico esta sendo gerado corretamente
