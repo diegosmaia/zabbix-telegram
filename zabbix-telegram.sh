@@ -144,9 +144,9 @@ if [ $(($ENVIA_GRAFICO)) -eq '1' ]; then
 	else
 		# Download do gráfico e envio
 		if [ "${ZABBIXVERSION34}" == "1" ]; then
-			${CURL} -k -s -c ${COOKIE}  -b ${COOKIE} -d "itemids=${GRAPHID}&period=${PERIOD}&width=${WIDTH}&profileIdx=web.item.graph" ${ZBX_URL}"/chart.php" -o "${PNG_PATH}";
+			${CURL} -k -s -c ${COOKIE}  -b ${COOKIE} -d "itemids[]=${GRAPHID}&period=${PERIOD}&width=${WIDTH}&profileIdx=web.item.graph" ${ZBX_URL}"/chart.php" -o "${PNG_PATH}";
 		else
-			${CURL} -k -s -c ${COOKIE}  -b ${COOKIE} -d "itemids=${GRAPHID}&period=${PERIOD}&width=${WIDTH}" ${ZBX_URL}"/chart.php" -o "${PNG_PATH}";
+			${CURL} -k -s -c ${COOKIE}  -b ${COOKIE} -d "itemids[]=${GRAPHID}&period=${PERIOD}&width=${WIDTH}" ${ZBX_URL}"/chart.php" -o "${PNG_PATH}";
 		fi
 	fi
 
@@ -164,7 +164,7 @@ fi
 
 # Teste com curl tentando baixar o gráfico
 # Verifique o arquivo /tmp/telegram-graph.png no seu computador para ver se o grafico esta sendo gerado corretamente
-# ${CURL} -k -c ${COOKIE}  -b ${COOKIE} -d "graphid=1459&itemids=1459&period=10800&width=800" 192.168.10.24/zabbix/chart.php > /tmp/telegram-graph.png
+# ${CURL} -k -c ${COOKIE}  -b ${COOKIE} -d "graphid=1459&itemids[]=1459&period=10800&width=800" 192.168.10.24/zabbix/chart.php > /tmp/telegram-graph.png
 
 #Verificando o envio da msg
 
